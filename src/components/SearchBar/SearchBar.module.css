@@ -1,0 +1,28 @@
+.SearchBar {
+  width: 100%;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: aliceblue;
+}
+.form {
+  display: flex;
+  gap: 35px;
+  justify-content: center;
+}
+.input {
+  padding: 15px;
+  border: 2px solid gray;
+  border-radius: 5px;
+  font-size: 16px;
+}
+.input:focus,
+.input:active {
+}
+.btn {
+  padding: 15px;
+
+  border-radius: 15px;
+  font-size: 16px;
+}
