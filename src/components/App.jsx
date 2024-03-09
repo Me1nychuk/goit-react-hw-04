@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import "./App.css";
 import SearchBar from "./SearchBar/SearchBar";
 import ImageGallery from "./ImageGallery/ImageGallery";
@@ -18,20 +18,27 @@ function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalData, setModalData] = useState({});
 
-  const handleSearch = async (word) => {
-    setIsLoading(true);
-    setQuery(word);
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const fetchedImages = await fetchImages(query);
+        setImages(fetchedImages.results);
+        setPage(1);
+        setTotalPage(fetchedImages.total_pages);
+        setError(null);
+      } catch (error) {
+        setError(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-    try {
-      const fetchedImages = await fetchImages(word);
-      setImages(fetchedImages.results);
-      setPage(1);
-      setTotalPage(fetchedImages.total_pages);
-    } catch (error) {
-      setError(error);
-    } finally {
-      setIsLoading(false);
-    }
+    fetchData();
+  }, [query]);
+
+  const handleSearch = (word) => {
+    setQuery(word);
   };
 
   const handleSearchMore = async () => {
@@ -56,9 +63,9 @@ function App() {
   };
   const memoizedModalData = useMemo(
     () => ({
-      name: modalData.name,
-      image: modalData.image,
-      description: modalData.description,
+      name: modalData.name || "",
+      image: modalData.image || "",
+      description: modalData.description || "",
     }),
     [modalData]
   );

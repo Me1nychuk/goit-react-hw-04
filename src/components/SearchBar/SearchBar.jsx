@@ -1,4 +1,5 @@
 import toast, { Toaster } from "react-hot-toast";
+import PropTypes from "prop-types";
 import css from "./SearchBar.module.css";
 
 const SearchBar = ({ onSubmit }) => {
@@ -33,6 +34,10 @@ const SearchBar = ({ onSubmit }) => {
       </form>
     </header>
   );
+};
+
+SearchBar.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
 };
 
 export default SearchBar;

@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import css from "./ImageCard.module.css";
 
 const ImageCard = ({ imageSmall, imageLarge, description, name, onClick }) => {
@@ -15,6 +16,14 @@ const ImageCard = ({ imageSmall, imageLarge, description, name, onClick }) => {
       />
     </div>
   );
+};
+
+ImageCard.propTypes = {
+  imageSmall: PropTypes.string.isRequired,
+  imageLarge: PropTypes.string.isRequired,
+  description: PropTypes.string,
+  name: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired,
 };
 
 export default ImageCard;

@@ -1,4 +1,5 @@
 import ReactModal from "react-modal";
+import PropTypes from "prop-types";
 import css from "./ImageModal.module.css";
 
 const customStyles = {
@@ -20,6 +21,10 @@ const customStyles = {
   },
 };
 const ImageModal = ({ data, isOpen, onRequestClose }) => {
+  if (!data) {
+    return <div>No data available</div>;
+  }
+
   return (
     <ReactModal
       isOpen={isOpen}
@@ -38,6 +43,16 @@ const ImageModal = ({ data, isOpen, onRequestClose }) => {
       </div>
     </ReactModal>
   );
+};
+
+ImageModal.propTypes = {
+  data: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    image: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+  }),
+  isOpen: PropTypes.bool.isRequired,
+  onRequestClose: PropTypes.func.isRequired,
 };
 
 export default ImageModal;
