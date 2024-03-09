@@ -1,6 +1,6 @@
-import ImageCard from "../ImageCard/ImageCard";
 import PropTypes from "prop-types";
 import css from "./ImageGallery.module.css";
+import ImageCard from "../ImageCard/ImageCard";
 
 const ImageGallery = ({ images, onClick }) => {
   return (
@@ -8,13 +8,11 @@ const ImageGallery = ({ images, onClick }) => {
       <ul className={css.list}>
         {images.map((el) => {
           return (
-            <li key={el.id} className={css}>
+            <li key={el.id} className={css.listItem}>
               <ImageCard
                 imageSmall={el.urls.small}
-                imageLarge={el.urls.full}
                 description={el.alt_description}
-                name={el.user.name}
-                onClick={onClick}
+                onClick={() => onClick(el)}
               />
             </li>
           );

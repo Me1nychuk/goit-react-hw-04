@@ -1,12 +1,9 @@
 import PropTypes from "prop-types";
 import css from "./ImageCard.module.css";
 
-const ImageCard = ({ imageSmall, imageLarge, description, name, onClick }) => {
+const ImageCard = ({ imageSmall, description, onClick }) => {
   return (
-    <div
-      className={css.wrapper}
-      onClick={() => onClick(name, description, imageLarge)}
-    >
+    <div className={css.wrapper} onClick={onClick}>
       <img
         className={css.img}
         width="400px"
@@ -20,9 +17,7 @@ const ImageCard = ({ imageSmall, imageLarge, description, name, onClick }) => {
 
 ImageCard.propTypes = {
   imageSmall: PropTypes.string.isRequired,
-  imageLarge: PropTypes.string.isRequired,
   description: PropTypes.string,
-  name: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
 };
 

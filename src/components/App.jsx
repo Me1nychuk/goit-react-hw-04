@@ -22,11 +22,18 @@ function App() {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const fetchedImages = await fetchImages(query);
-        setImages(fetchedImages.results);
-        setPage(1);
-        setTotalPage(fetchedImages.total_pages);
-        setError(null);
+        if (page === 1) {
+          const fetchedImages = await fetchImages(query);
+          setImages(fetchedImages.results);
+          setPage(1);
+          setTotalPage(fetchedImages.total_pages);
+          setError(null);
+        } else {
+          const fetchedImages = await fetchImages(query, page);
+          setImages((prevState) => {
+            return [...prevState, ...fetchedImages.results];
+          });
+        }
       } catch (error) {
         setError(error);
       } finally {
@@ -34,29 +41,37 @@ function App() {
       }
     };
 
-    fetchData();
-  }, [query]);
+    if (query !== "") {
+      fetchData();
+    }
+  }, [query, page]);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [images]);
 
   const handleSearch = (word) => {
     setQuery(word);
+    setPage(1);
   };
-
-  const handleSearchMore = async () => {
+  const handleAddImage = () => {
     setPage((prevState) => prevState + 1);
-    try {
-      const fetchedImages = await fetchImages(query, page + 1);
-      setImages((prevState) => {
-        return [...prevState, ...fetchedImages.results];
-      });
-    } catch (error) {
-      setError(error);
-    }
   };
 
-  const handleOpenModal = (name, description, image) => {
-    setModalData({ name, description, image });
+  const handleOpenModal = (data) => {
+    const image = data.urls.full;
+    const description = data.alt_description;
+    const name = data.user.name;
+
+    setModalData({ image, description, name });
     setIsModalOpen(true);
   };
+  function scrollToBottom() {
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: "smooth", // Додає плавність до скролу
+    });
+  }
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
@@ -73,14 +88,14 @@ function App() {
   return (
     <>
       <SearchBar onSubmit={handleSearch} />
-      {error && <ErrorMessage message={error} />}
+
       {isLoading ? (
         <Loader />
       ) : (
         <ImageGallery images={images} onClick={handleOpenModal} />
       )}
-      {totalPage > page && <LoadMoreBtn onClick={handleSearchMore} />}
-
+      {totalPage > page && <LoadMoreBtn onClick={handleAddImage} />}
+      {error && <ErrorMessage message={error.message} />}
       <ImageModal
         data={memoizedModalData}
         isOpen={isModalOpen}
